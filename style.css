@@ -1,7 +1,3 @@
-@tailwind base;
-@tailwind components;
-@tailwind utilities;
-
 /* formatting */
 
 @media screen and (max-width: 720px) {
@@ -16,8 +12,8 @@ body, main, section, article {
   margin: 20px;
 }
 
-section, main, {
-  background-color: F9F8F8;
+section, main {
+  background-color: #F9F8F8;
 }
 
 section {
@@ -50,7 +46,7 @@ header,h1,h2,h3,p {
 }
 
 h1, h2, h3, p, li {
-  font-family: Roboto,'Gill Sans', 'Gill Sans MT', 'Trebuchet MS', sans-serif;
+  font-family: Inter,'Gill Sans', 'Gill Sans MT', 'Trebuchet MS', sans-serif;
 }
 
 ul {
@@ -69,7 +65,7 @@ ul {
 
 header {
   text-align: center;
-  font-family: Roboto, Georgia, sans-serif;
+  font-family: Inter, Georgia, sans-serif;
   font-size: 22px;
   background-color: #bcbcbc;
 }
@@ -90,7 +86,7 @@ h3 {
 
 
 footer {
-  font-family: Roboto, Georgia, sans-serif;
+  font-family: Inter, Georgia, sans-serif;
   font-size: 10px;
   height: 30px;
   text-align: center;

@@ -2,6 +2,10 @@
 @tailwind components;
 @tailwind utilities;
 
+html {
+  scroll-behavior: smooth;
+}
+
 body {
   background-color: #060810;
   background-image: radial-gradient(rgba(143, 173, 154, 0.06) 1px, transparent 1px);

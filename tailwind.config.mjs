@@ -7,6 +7,7 @@ export default {
         sans: ['Inter', 'system-ui', 'sans-serif'],
         serif: ['Fraunces', 'Georgia', 'serif'],
         mono: ['Fira Code', 'monospace'],
+        jetbrains: ['JetBrains Mono', 'monospace'],
       },
       colors: {
         navy: { DEFAULT: '#060810', light: '#0a0e1a' },

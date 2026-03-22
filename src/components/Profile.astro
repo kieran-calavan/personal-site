@@ -1,8 +1,8 @@
 ---
 ---
 
-<div class="flex flex-col items-center text-center space-y-4 lg:space-y-6">
-  <div class="rounded-2xl p-0.5 gradient-bg shadow-glow-cyan">
+<div class="flex flex-col items-center text-center space-y-4 lg:space-y-6 animate-fade-up">
+  <div class="rounded-2xl p-0.5 gradient-bg [box-shadow:0_0_30px_rgba(143,173,154,0.2)] transition-transform duration-300 hover:scale-[1.03]">
     <img
       src="/kieran.jpeg"
       alt="Kieran Calavan"
@@ -10,16 +10,43 @@
     />
   </div>
   <div class="flex flex-col space-y-4 lg:space-y-6">
-    <p class="font-mono text-xs lg:text-sm tracking-[0.2em] uppercase text-zinc-500">
-      Web Developer
-    </p>
-    <h1 class="font-mono text-3xl lg:text-5xl font-bold text-zinc-50">
-      Kieran Calavan
-    </h1>
-    <p class="font-mono text-sm lg:text-md text-zinc-500">Saint Paul, MN</p>
-    <p class="font-mono text-sm text-zinc-400 max-w-md leading-relaxed">
+    <p id="role-typed" class="font-mono text-xs lg:text-sm tracking-[0.2em] uppercase text-zinc-500 min-h-[1em]"></p>
+    <h1 id="name-typed" class="font-mono text-3xl lg:text-5xl font-bold text-zinc-50 min-h-[1.2em]"></h1>
+    <p id="location-el" class="font-mono text-sm lg:text-md text-zinc-500 opacity-0 translate-y-4 transition-[opacity,transform] duration-700">Saint Paul, MN</p>
+    <p id="bio-typed" class="font-jetbrains text-sm text-zinc-400 max-w-md leading-relaxed opacity-0 translate-y-4 transition-[opacity,transform] duration-700">
       Web developer with 4+ years turning designs into production-ready WordPress sites across agency and client projects.
-      <br/><br/>Currently @ <a href="https://thatsnice.com" target="_blank" rel="noopener noreferrer" class="text-zinc-300 hover:text-[#8fad9a] transition-colors duration-200">That's Nice</a>.
+      <br/><br/>Currently @ <a href="https://thatsnice.com" target="_blank" rel="noopener noreferrer" class="text-zinc-300 hover:text-[#8fad9a] transition-colors duration-200 link-underline">That's Nice</a>.<span class="inline-block mb-1 w-0.5 h-4 bg-zinc-400 ml-0.5 align-middle animate-[blink_1s_step-end_infinite]"></span>
     </p>
   </div>
 </div>
+
+<script>
+  const sleep = (ms: number) => new Promise(r => setTimeout(r, ms));
+
+  async function typeInto(el: HTMLElement, text: string, speed: number) {
+    for (let i = 1; i <= text.length; i++) {
+      el.textContent = text.slice(0, i);
+      await sleep(speed);
+    }
+  }
+
+  setTimeout(async () => {
+    const roleEl = document.getElementById('role-typed') as HTMLElement;
+    const nameEl = document.getElementById('name-typed') as HTMLElement;
+    const locationEl = document.getElementById('location-el') as HTMLElement;
+    const bioEl = document.getElementById('bio-typed') as HTMLElement;
+    const chartEl = document.getElementById('github-chart') as HTMLElement;
+    const socialEl = document.getElementById('social-links') as HTMLElement;
+
+    await typeInto(roleEl, 'Web Developer', 55);
+    await typeInto(nameEl, 'Kieran Calavan', 40);
+    await sleep(100);
+    locationEl.classList.remove('opacity-0', 'translate-y-4');
+    await sleep(200);
+    bioEl.classList.remove('opacity-0', 'translate-y-4');
+    await sleep(200);
+    if (chartEl) chartEl.classList.remove('opacity-0', 'translate-y-4');
+    await sleep(200);
+    if (socialEl) socialEl.classList.remove('opacity-0', 'translate-y-4');
+  }, 500);
+</script>

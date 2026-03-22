@@ -6,6 +6,17 @@ html {
   scroll-behavior: smooth;
 }
 
+@keyframes blink {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0; }
+}
+
+@keyframes fadeUp {
+  from { opacity: 0; transform: translateY(16px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+
 body {
   background-color: #060810;
   background-image: radial-gradient(rgba(143, 173, 154, 0.06) 1px, transparent 1px);
@@ -13,6 +24,10 @@ body {
 }
 
 @layer utilities {
+  .font-jetbrains {
+    font-family: 'JetBrains Mono', monospace;
+  }
+
   .text-gradient {
     background: linear-gradient(to right, #2d4a3e, #8fad9a);
     -webkit-background-clip: text;
@@ -26,5 +41,30 @@ body {
 
   .gradient-bg-inverted {
     background: linear-gradient(to left, #2d4a3e, #8fad9a);
+  }
+
+  .animate-fade-up {
+    animation: fadeUp 0.7s ease both;
+  }
+
+
+  .link-underline {
+    position: relative;
+    text-decoration: none;
+  }
+
+  .link-underline::after {
+    content: '';
+    position: absolute;
+    left: 0;
+    bottom: -1px;
+    width: 0;
+    height: 1px;
+    background: #8fad9a;
+    transition: width 0.3s ease;
+  }
+
+  .link-underline:hover::after {
+    width: 100%;
   }
 }

@@ -1,4 +1,14 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" fill="none">
-  <polygon points="192,100 360,400 24,400" fill="#e0e0e0"/>
-  <polygon points="336,170 488,400 184,400" fill="#888888"/>
+  <rect width="512" height="512" rx="96" fill="#111111"/>
+  <!-- K -->
+  <line x1="100" y1="120" x2="100" y2="400" stroke="#e0e0e0" stroke-width="24" stroke-linecap="round"/>
+  <line x1="100" y1="260" x2="230" y2="120" stroke="#e0e0e0" stroke-width="24" stroke-linecap="round"/>
+  <line x1="100" y1="260" x2="230" y2="400" stroke="#e0e0e0" stroke-width="24" stroke-linecap="round"/>
+  <!-- C -->
+  <path d="M370,150 C300,150 270,190 270,260 C270,330 300,370 370,370" 
+        stroke="#888888" stroke-width="24" fill="none" stroke-linecap="round"/>
+  <!-- Mountain -->
+  <polygon points="240,180 430,410 60,410" 
+           fill="none" stroke="#333333" stroke-width="8" 
+           stroke-linejoin="round" stroke-dasharray="14 20"/>
 </svg>

@@ -3,5 +3,24 @@
 @tailwind utilities;
 
 body {
-  background-image: url('/bg-pattern.svg');
+  background-color: #060810;
+  background-image: radial-gradient(rgba(143, 173, 154, 0.06) 1px, transparent 1px);
+  background-size: 28px 28px;
+}
+
+@layer utilities {
+  .text-gradient {
+    background: linear-gradient(to right, #2d4a3e, #8fad9a);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+  }
+
+  .gradient-bg {
+    background: linear-gradient(to right, #2d4a3e, #8fad9a);
+  }
+
+  .gradient-bg-inverted {
+    background: linear-gradient(to left, #2d4a3e, #8fad9a);
+  }
 }

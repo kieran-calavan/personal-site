@@ -46,11 +46,11 @@ if (token) {
 }
 
 function getColor(count: number): string {
-  if (count === 0) return '#161b22';
-  if (count <= 3) return '#0e4429';
-  if (count <= 6) return '#006d32';
-  if (count <= 9) return '#26a641';
-  return '#39d353';
+  if (count === 0) return 'rgba(143, 173, 154, 0.08)';
+  if (count <= 3) return 'rgba(143, 173, 154, 0.30)';
+  if (count <= 6) return 'rgba(143, 173, 154, 0.55)';
+  if (count <= 9) return 'rgba(143, 173, 154, 0.75)';
+  return 'rgba(143, 173, 154, 1.0)';
 }
 
 function formatDate(dateStr: string): string {
@@ -63,20 +63,20 @@ function formatDate(dateStr: string): string {
 }
 ---
 
-<div id="github-chart" class="hidden sm:block rounded-xl p-px gradient-bg-inverted shadow-glow-card w-full opacity-0 translate-y-4 transition-[opacity,transform] duration-700">
+<div id="github-chart" class="hidden [@media(min-width:712px)]:block rounded-xl p-px gradient-bg-inverted shadow-glow-card w-full opacity-0 translate-y-4 transition-[opacity,transform] duration-700">
   <div class="bg-[#0a0e1a] rounded-xl p-4 w-full">
     {weeks.length > 0 ? (
       <div class="relative">
         <div
           id="contribution-tooltip"
-          class="fixed z-50 hidden bg-[#1a1f2e] text-white text-xs px-2 py-1 rounded pointer-events-none border border-white/10 whitespace-nowrap"
+          class="fixed z-50 hidden font-mono text-xs text-zinc-400 pointer-events-none whitespace-nowrap"
         ></div>
-        <div class="grid gap-[3px]" style="grid-template-columns: repeat(53, minmax(0, 1fr));">
+        <div class="grid gap-[2px]" style="grid-template-columns: repeat(53, 10px);">
           {weeks.map((week) => (
-            <div class="flex flex-col gap-[3px]">
+            <div class="flex flex-col gap-[2px]">
               {week.contributionDays.map((day) => (
                 <div
-                  class="w-full aspect-square rounded-sm cursor-default transition-opacity hover:opacity-80"
+                  class="w-[10px] h-[10px] rounded-sm cursor-default transition-opacity hover:opacity-80"
                   style={`background-color: ${getColor(day.contributionCount)}`}
                   data-date={formatDate(day.date)}
                   data-count={day.contributionCount}

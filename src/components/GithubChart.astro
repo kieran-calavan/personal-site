@@ -1,13 +1,126 @@
 ---
+const token = import.meta.env.GH_TOKEN;
+
+interface ContributionDay {
+  date: string;
+  contributionCount: number;
+}
+
+interface Week {
+  contributionDays: ContributionDay[];
+}
+
+let weeks: Week[] = [];
+
+if (token) {
+  try {
+    const query = `{
+      user(login: "kieran-calavan") {
+        contributionsCollection {
+          contributionCalendar {
+            weeks {
+              contributionDays {
+                date
+                contributionCount
+              }
+            }
+          }
+        }
+      }
+    }`;
+
+    const res = await fetch('https://api.github.com/graphql', {
+      method: 'POST',
+      headers: {
+        Authorization: `Bearer ${token}`,
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({ query }),
+    });
+
+    const json = await res.json();
+    weeks = json.data.user.contributionsCollection.contributionCalendar.weeks;
+  } catch (_) {
+    // fall through to static image fallback
+  }
+}
+
+function getColor(count: number): string {
+  if (count === 0) return '#161b22';
+  if (count <= 3) return '#0e4429';
+  if (count <= 6) return '#006d32';
+  if (count <= 9) return '#26a641';
+  return '#39d353';
+}
+
+function formatDate(dateStr: string): string {
+  const [year, month, day] = dateStr.split('-').map(Number);
+  return new Date(year, month - 1, day).toLocaleDateString('en-US', {
+    month: 'long',
+    day: 'numeric',
+    year: 'numeric',
+  });
+}
 ---
 
 <div id="github-chart" class="hidden sm:block rounded-xl p-px gradient-bg-inverted shadow-glow-card w-full opacity-0 translate-y-4 transition-[opacity,transform] duration-700">
   <div class="bg-[#0a0e1a] rounded-xl p-4 w-full">
-    <img
-      src="https://ghchart.rshah.org/kieran-calavan"
-      alt="Kieran's GitHub contribution chart"
-      class="w-full [filter:grayscale(50%)]"
-      loading="lazy"
-    />
+    {weeks.length > 0 ? (
+      <div class="relative">
+        <div
+          id="contribution-tooltip"
+          class="fixed z-50 hidden bg-[#1a1f2e] text-white text-xs px-2 py-1 rounded pointer-events-none border border-white/10 whitespace-nowrap"
+        ></div>
+        <div class="grid gap-[3px]" style="grid-template-columns: repeat(53, minmax(0, 1fr));">
+          {weeks.map((week) => (
+            <div class="flex flex-col gap-[3px]">
+              {week.contributionDays.map((day) => (
+                <div
+                  class="w-full aspect-square rounded-sm cursor-default transition-opacity hover:opacity-80"
+                  style={`background-color: ${getColor(day.contributionCount)}`}
+                  data-date={formatDate(day.date)}
+                  data-count={day.contributionCount}
+                ></div>
+              ))}
+            </div>
+          ))}
+        </div>
+      </div>
+    ) : (
+      <img
+        src="https://ghchart.rshah.org/kieran-calavan"
+        alt="Kieran's GitHub contribution chart"
+        class="w-full [filter:grayscale(50%)]"
+        loading="lazy"
+      />
+    )}
   </div>
 </div>
+
+<script>
+  const tooltip = document.getElementById('contribution-tooltip') as HTMLElement;
+  const cells = document.querySelectorAll<HTMLElement>('[data-count]');
+
+  cells.forEach((cell) => {
+    cell.addEventListener('mouseenter', () => {
+      const date = cell.dataset.date!;
+      const count = Number(cell.dataset.count);
+      tooltip.textContent =
+        count === 0
+          ? `No contributions on ${date}`
+          : count === 1
+            ? `1 contribution on ${date}`
+            : `${count} contributions on ${date}`;
+      tooltip.classList.remove('hidden');
+    });
+
+    cell.addEventListener('mouseleave', () => {
+      tooltip.classList.add('hidden');
+    });
+
+    cell.addEventListener('mousemove', (e) => {
+      tooltip.style.left = `${e.clientX + 14}px`;
+      tooltip.style.top = `${e.clientY - 36}px`;
+    });
+  });
+</script>

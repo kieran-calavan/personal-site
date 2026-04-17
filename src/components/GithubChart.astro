@@ -64,12 +64,24 @@ function formatDate(dateStr: string): string {
 ---
 
 <div id="github-chart" class="hidden [@media(min-width:712px)]:block rounded-xl p-px gradient-bg-inverted shadow-glow-card w-full opacity-0 translate-y-4 transition-[opacity,transform] duration-700">
-  <div class="bg-[#0a0e1a] rounded-xl p-4 w-full">
+  <div class="bg-[#0a0e1a]/90 backdrop-blur-sm rounded-xl p-5 w-full">
+    <div class="flex items-center justify-between mb-4">
+      <span class="font-mono text-[10px] tracking-[0.25em] uppercase text-zinc-500">Contributions · last 12 months</span>
+      <div class="flex items-center gap-1.5 font-mono text-[10px] text-zinc-500">
+        <span>less</span>
+        <span class="inline-block w-[9px] h-[9px] rounded-sm" style="background-color: rgba(143, 173, 154, 0.08);"></span>
+        <span class="inline-block w-[9px] h-[9px] rounded-sm" style="background-color: rgba(143, 173, 154, 0.30);"></span>
+        <span class="inline-block w-[9px] h-[9px] rounded-sm" style="background-color: rgba(143, 173, 154, 0.55);"></span>
+        <span class="inline-block w-[9px] h-[9px] rounded-sm" style="background-color: rgba(143, 173, 154, 0.75);"></span>
+        <span class="inline-block w-[9px] h-[9px] rounded-sm" style="background-color: rgba(143, 173, 154, 1.0);"></span>
+        <span>more</span>
+      </div>
+    </div>
     {weeks.length > 0 ? (
       <div class="relative">
         <div
           id="contribution-tooltip"
-          class="fixed z-50 hidden font-mono text-xs text-zinc-400 pointer-events-none whitespace-nowrap"
+          class="fixed z-50 hidden font-mono text-xs text-zinc-300 bg-[#0a0e1a]/95 border border-zinc-800 rounded px-2 py-1 pointer-events-none whitespace-nowrap"
         ></div>
         <div class="grid gap-[2px]" style="grid-template-columns: repeat(53, 10px);">
           {weeks.map((week) => (

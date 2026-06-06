@@ -4,17 +4,11 @@ export default {
   theme: {
     extend: {
       fontFamily: {
-        sans: ['Inter', 'system-ui', 'sans-serif'],
-        serif: ['Fraunces', 'Georgia', 'serif'],
-        mono: ['Fira Code', 'monospace'],
-        jetbrains: ['JetBrains Mono', 'monospace'],
+        sans: ['Geist Variable', 'Geist', 'system-ui', 'sans-serif'],
+        mono: ['Geist Mono Variable', 'Geist Mono', 'monospace'],
       },
       colors: {
-        navy: { DEFAULT: '#060810', light: '#0a0e1a' },
-      },
-      boxShadow: {
-        'glow-cyan': '0 0 60px rgba(91,201,248,0.12)',
-        'glow-card': '0 0 40px rgba(91,201,248,0.06)',
+        accent: '#facc15',
       },
     },
   },

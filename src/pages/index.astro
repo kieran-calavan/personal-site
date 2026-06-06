@@ -1,12 +1,68 @@
 ---
 import BaseLayout from '../layouts/BaseLayout.astro';
-import Profile from '../components/Profile.astro';
-import SocialLinks from '../components/SocialLinks.astro';
+
+const links = [
+  ['email', 'mailto:kieran.calavan@gmail.com'],
+  ['github', 'https://github.com/kieran-calavan/'],
+  ['linkedin', 'https://linkedin.com/in/kieran-calavan/'],
+];
+const details = [
+  ['role', 'web developer'],
+  ['based', 'saint paul, mn'],
+  ['exp', '4+ years'],
+];
 ---
 
 <BaseLayout>
-  <main class="flex flex-col items-center gap-8 w-full max-w-[700px] py-16">
-    <Profile />
-    <SocialLinks />
+  <main class="min-h-[100dvh] w-full max-w-[1200px] mx-auto px-6 md:px-10 flex flex-col justify-center py-20">
+    <!-- masthead -->
+    <header class="rise flex items-end justify-between gap-6 border-b border-zinc-700 pb-6" style="animation-delay:0.05s">
+      <h1 class="text-[clamp(2.5rem,10vw,8rem)] font-black tracking-tighter leading-[0.85]">
+        Kieran<br />Calavan
+      </h1>
+      <span class="mono text-xs text-zinc-500 pb-3 shrink-0 hidden md:block">
+        <span class="accent">~</span> kieran-calavan
+      </span>
+    </header>
+
+    <!-- ledger -->
+    <div class="rise grid grid-cols-1 md:grid-cols-12 gap-px bg-zinc-800 mt-px" style="animation-delay:0.18s">
+      <!-- profile -->
+      <section class="bg-[#09090b] md:col-span-5 py-6 md:p-8">
+        <h2 class="mono text-[11px] tracking-[0.25em] uppercase accent mb-4">profile</h2>
+        <p class="mono text-sm text-zinc-300 leading-relaxed">
+          <span class="accent">$</span> Web developer with four years turning designs
+          into production-ready sites across agency and client projects.
+        </p>
+      </section>
+
+      <!-- details -->
+      <section class="bg-[#09090b] md:col-span-3 py-6 md:p-8 flex flex-col gap-5">
+        <h2 class="mono text-[11px] tracking-[0.25em] uppercase text-zinc-500">details</h2>
+        {details.map(([k, v]) => (
+          <div class="mono">
+            <p class="text-[11px] uppercase text-zinc-600">{k}</p>
+            <p class="text-sm text-zinc-200 mt-0.5">{v}</p>
+          </div>
+        ))}
+        <div class="mono">
+          <p class="text-[11px] uppercase text-zinc-600">now</p>
+          <a href="https://thatsnice.com" target="_blank" rel="noopener noreferrer"
+             class="text-sm text-zinc-200 mt-0.5 hover:text-[var(--accent)] transition-colors">that's nice ↗</a>
+        </div>
+      </section>
+
+      <!-- contact -->
+      <nav class="bg-[#09090b] md:col-span-4 py-6 md:p-8 flex flex-col gap-3.5" aria-label="Contact links">
+        <h2 class="mono text-[11px] tracking-[0.25em] uppercase text-zinc-500 mb-1">contact</h2>
+        {links.map(([label, href]) => (
+          <a href={href} target="_blank" rel="noopener noreferrer"
+             class="group mono flex items-center justify-between text-sm text-zinc-300 hover:text-[var(--accent)] transition-colors">
+            <span>[ {label} ]</span>
+            <span class="text-zinc-600 group-hover:text-[var(--accent)] group-hover:translate-x-0.5 transition-all">↗</span>
+          </a>
+        ))}
+      </nav>
+    </div>
   </main>
 </BaseLayout>

@@ -30,17 +30,17 @@ const builds = [
     </header>
 
     <!-- ledger -->
-    <div class="rise grid grid-cols-1 md:grid-cols-12 gap-px bg-zinc-800 mt-px" style="animation-delay:0.18s">
+    <div class="grid grid-cols-1 md:grid-cols-12 gap-px bg-zinc-800 mt-px">
       <!-- profile -->
-      <section class="bg-[#09090b] md:col-span-5 py-6 md:p-8">
+      <section class="rise bg-[#09090b] md:col-span-5 py-6 md:p-8" style="animation-delay:0.18s">
         <h2 class="mono text-[11px] tracking-[0.25em] uppercase accent mb-4">profile</h2>
         <p class="mono text-sm text-zinc-300 leading-relaxed">
-          <span class="accent">$</span> Web developer with 4+ years shipping production sites for agencies and clients. Always have a few personal projects going.
+          <span class="accent">$</span> Web developer with 4+ years shipping production sites for agencies and clients. Always tinkering on personal builds.<span class="term-caret"></span>
         </p>
       </section>
 
       <!-- details -->
-      <section class="bg-[#09090b] md:col-span-3 py-6 md:p-8 flex flex-col gap-5">
+      <section class="rise bg-[#09090b] md:col-span-3 py-6 md:p-8 flex flex-col gap-5" style="animation-delay:0.26s">
         <h2 class="mono text-[11px] tracking-[0.25em] uppercase text-zinc-500">details</h2>
         {details.map(([k, v]) => (
           <div class="mono">
@@ -51,12 +51,12 @@ const builds = [
         <div class="mono">
           <p class="text-[11px] uppercase text-zinc-600">now</p>
           <a href="https://thatsnice.com" target="_blank" rel="noopener noreferrer"
-             class="text-sm text-zinc-200 mt-0.5 hover:text-[var(--accent)] transition-colors">that's nice ↗</a>
+             class="link-underline inline-block w-fit text-sm text-zinc-200 mt-0.5 hover:text-[var(--accent)] transition-colors">that's nice ↗</a>
         </div>
       </section>
 
       <!-- contact -->
-      <nav class="bg-[#09090b] md:col-span-4 py-6 md:p-8 flex flex-col gap-3.5" aria-label="Contact links">
+      <nav class="rise bg-[#09090b] md:col-span-4 py-6 md:p-8 flex flex-col gap-3.5" style="animation-delay:0.34s" aria-label="Contact links">
         <div class="mono flex flex-col gap-1">
           <p class="text-[11px] tracking-[0.25em] uppercase text-zinc-500 mb-1">personal projects</p>
           {builds.map(([label, href, desc], i) => {
@@ -67,7 +67,7 @@ const builds = [
             <div class="tip group w-fit">
               <div class="flex items-center gap-2">
                 <a href={href} target="_blank" rel="noopener noreferrer"
-                   class="block text-sm text-zinc-200 hover:text-[var(--accent)] transition-colors">{label} ↗</a>
+                   class="link-underline inline-block w-fit text-sm text-zinc-200 hover:text-[var(--accent)] transition-colors">{label} ↗</a>
                 <input id={`tip-${i}`} type="checkbox" class="tip-toggle sr-only md:hidden" />
                 <label for={`tip-${i}`} aria-label={`Show description for ${label}`}
                        class="tip-btn md:hidden inline-flex items-center justify-center p-1.5 -m-1.5 translate-y-px text-zinc-600 cursor-pointer select-none">
@@ -92,7 +92,7 @@ const builds = [
         {links.map(([label, href]) => (
           <a href={href} target="_blank" rel="noopener noreferrer"
              class="group mono flex items-center justify-between text-sm text-zinc-300 hover:text-[var(--accent)] transition-colors">
-            <span>[ {label} ]</span>
+            <span class="link-underline">[ {label} ]</span>
             <span class="text-zinc-600 group-hover:text-[var(--accent)] group-hover:translate-x-0.5 transition-all">↗</span>
           </a>
         ))}

@@ -67,7 +67,7 @@ const builds = [
             <div class="tip group w-fit">
               <div class="flex items-center gap-2">
                 <a href={href} target="_blank" rel="noopener noreferrer"
-                   class="link-underline inline-block w-fit text-sm text-zinc-200 hover:text-[var(--accent)] transition-colors">{label} ↗</a>
+                   class="link-underline inline-block w-fit text-sm text-zinc-200 group-hover:text-[var(--accent)] transition-colors">{label} ↗</a>
                 <input id={`tip-${i}`} type="checkbox" class="tip-toggle sr-only md:hidden" />
                 <label for={`tip-${i}`} aria-label={`Show description for ${label}`}
                        class="tip-btn md:hidden inline-flex items-center justify-center p-1.5 -m-1.5 translate-y-px text-zinc-600 cursor-pointer select-none">
@@ -140,6 +140,15 @@ const builds = [
     min-height: 0;
     margin-top: 0.6rem;
     padding: 0.5rem 0.75rem;
+  }
+  /* bridge the gap above the card so it's clickable + keeps hover continuous */
+  .tip-card::before {
+    content: '';
+    position: absolute;
+    left: 0;
+    right: 0;
+    top: -0.6rem;
+    height: 0.6rem;
   }
 
   /* accent bar that sweeps across as the card opens */

@@ -12,7 +12,8 @@ const details = [
   ['exp', '4+ years'],
 ];
 const builds = [
-  ['trade-automate', 'https://trade-automate.com/'],
+  ['trade automate', 'https://trade-automate.com/', 'Booking, scheduling & automation platform built for trades businesses.'],
+  ['cycle tracker', 'https://cycle-tracker-app-five.vercel.app/', 'Period & cycle tracking app with predictions and logging.'],
 ];
 ---
 
@@ -57,11 +58,20 @@ const builds = [
 
       <!-- contact -->
       <nav class="bg-[#09090b] md:col-span-4 py-6 md:p-8 flex flex-col gap-3.5" aria-label="Contact links">
-        <div class="mono">
+        <div class="mono flex flex-col gap-1">
           <p class="text-[11px] tracking-[0.25em] uppercase text-zinc-500 mb-1">builds</p>
-          {builds.map(([label, href]) => (
-            <a href={href} target="_blank" rel="noopener noreferrer"
-               class="block text-sm text-zinc-200 hover:text-[var(--accent)] transition-colors">{label} ↗</a>
+          {builds.map(([label, href, desc]) => (
+            <div class="tip group w-fit">
+              <a href={href} target="_blank" rel="noopener noreferrer"
+                 class="block text-sm text-zinc-200 hover:text-[var(--accent)] transition-colors">{label} ↗</a>
+              <div class="tip-wrap">
+                <div role="tooltip"
+                     class="tip-card relative overflow-hidden border-l-2 border-l-[var(--accent)] bg-zinc-900/95 w-56 text-[11px] normal-case tracking-normal leading-snug text-zinc-300">
+                  <span class="tip-scan"></span>
+                  <span class="accent mr-1">›</span>{desc}<span class="tip-caret"></span>
+                </div>
+              </div>
+            </div>
           ))}
         </div>
         <h2 class="mono text-[11px] tracking-[0.25em] uppercase text-zinc-500 mb-1">contact</h2>
@@ -76,3 +86,69 @@ const builds = [
     </div>
   </main>
 </BaseLayout>
+
+<style>
+  /* terminal-style tooltip: slides open in-flow below the hovered item */
+  .tip-wrap {
+    display: grid;
+    grid-template-rows: 0fr;
+    overflow: hidden;
+    opacity: 0;
+    transition: grid-template-rows 0.28s cubic-bezier(0.65, 0, 0.35, 1), opacity 0.18s ease;
+  }
+  .tip:hover .tip-wrap,
+  .tip:focus-within .tip-wrap {
+    grid-template-rows: 1fr;
+    opacity: 1;
+  }
+  .tip-card {
+    min-height: 0;
+    margin-top: 0.6rem;
+    padding: 0.5rem 0.75rem;
+  }
+
+  /* accent bar that sweeps across as the card opens */
+  .tip-scan {
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    width: 1.5px;
+    background: var(--accent);
+    box-shadow: 0 0 8px var(--accent);
+    left: 0;
+    opacity: 0;
+  }
+  .tip:hover .tip-scan,
+  .tip:focus-within .tip-scan {
+    animation: tip-sweep 0.34s cubic-bezier(0.65, 0, 0.35, 1);
+  }
+  @keyframes tip-sweep {
+    0%   { left: 0;    opacity: 1; }
+    90%  { opacity: 1; }
+    100% { left: 100%; opacity: 0; }
+  }
+
+  /* blinking block caret, revealed after the wipe lands */
+  .tip-caret {
+    display: inline-block;
+    width: 0.5em;
+    height: 1em;
+    margin-left: 2px;
+    vertical-align: text-bottom;
+    background: var(--accent);
+    opacity: 0;
+  }
+  .tip:hover .tip-caret,
+  .tip:focus-within .tip-caret {
+    animation: tip-blink 1s steps(1) 0.34s infinite;
+  }
+  @keyframes tip-blink {
+    0%, 50%  { opacity: 1; }
+    51%, 100% { opacity: 0; }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .tip-wrap { transition: opacity 0.15s ease; }
+    .tip-scan, .tip-caret { animation: none; }
+  }
+</style>

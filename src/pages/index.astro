@@ -59,19 +59,34 @@ const builds = [
       <nav class="bg-[#09090b] md:col-span-4 py-6 md:p-8 flex flex-col gap-3.5" aria-label="Contact links">
         <div class="mono flex flex-col gap-1">
           <p class="text-[11px] tracking-[0.25em] uppercase text-zinc-500 mb-1">personal projects</p>
-          {builds.map(([label, href, desc]) => (
+          {builds.map(([label, href, desc], i) => {
+            const words = desc.trim().split(' ');
+            const last = words.pop();
+            const head = words.join(' ');
+            return (
             <div class="tip group w-fit">
-              <a href={href} target="_blank" rel="noopener noreferrer"
-                 class="block text-sm text-zinc-200 hover:text-[var(--accent)] transition-colors">{label} ↗</a>
+              <div class="flex items-center gap-2">
+                <a href={href} target="_blank" rel="noopener noreferrer"
+                   class="block text-sm text-zinc-200 hover:text-[var(--accent)] transition-colors">{label} ↗</a>
+                <input id={`tip-${i}`} type="checkbox" class="tip-toggle sr-only md:hidden" />
+                <label for={`tip-${i}`} aria-label={`Show description for ${label}`}
+                       class="tip-btn md:hidden inline-flex items-center justify-center p-1.5 -m-1.5 translate-y-px text-zinc-600 cursor-pointer select-none">
+                  <svg class="tip-btn-icon" width="11" height="11" viewBox="0 0 24 24" fill="none"
+                       stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                    <path d="M6 9l6 6 6-6" />
+                  </svg>
+                </label>
+              </div>
               <div class="tip-wrap">
-                <div role="tooltip"
-                     class="tip-card relative overflow-hidden border-l-2 border-l-[var(--accent)] bg-zinc-900/95 w-56 text-[11px] normal-case tracking-normal leading-snug text-zinc-300">
+                <a href={href} target="_blank" rel="noopener noreferrer"
+                   class="tip-card relative block overflow-hidden border-l-2 border-l-[var(--accent)] bg-zinc-900/95 w-72 text-[11px] normal-case tracking-normal leading-snug text-zinc-300 hover:bg-zinc-800/95 hover:text-zinc-100 transition-colors">
                   <span class="tip-scan"></span>
-                  <span class="accent mr-1">›</span>{desc}<span class="tip-caret"></span>
-                </div>
+                  <span class="accent mr-1">›</span>{head} <span class="whitespace-nowrap">{last}<span class="tip-caret"></span></span>
+                </a>
               </div>
             </div>
-          ))}
+            );
+          })}
         </div>
         <h2 class="mono text-[11px] tracking-[0.25em] uppercase text-zinc-500 mb-1">contact</h2>
         {links.map(([label, href]) => (
@@ -87,7 +102,7 @@ const builds = [
 </BaseLayout>
 
 <style>
-  /* terminal-style tooltip: slides open in-flow below the hovered item */
+  /* mobile: collapsed; the [›] toggle reveals it. tapping the label follows the link */
   .tip-wrap {
     display: grid;
     grid-template-rows: 0fr;
@@ -95,10 +110,31 @@ const builds = [
     opacity: 0;
     transition: grid-template-rows 0.28s cubic-bezier(0.65, 0, 0.35, 1), opacity 0.18s ease;
   }
-  .tip:hover .tip-wrap,
-  .tip:focus-within .tip-wrap {
+  .tip:has(.tip-toggle:checked) .tip-wrap {
     grid-template-rows: 1fr;
     opacity: 1;
+  }
+  /* rotate the chevron + highlight the button when open */
+  .tip-btn-icon {
+    transition: transform 0.2s ease;
+  }
+  .tip:has(.tip-toggle:checked) .tip-btn-icon {
+    transform: rotate(180deg);
+  }
+  .tip:has(.tip-toggle:checked) .tip-btn {
+    color: var(--accent);
+  }
+  .tip-toggle:focus-visible + .tip-btn {
+    color: var(--accent);
+  }
+
+  /* desktop: no toggle — slide open on hover instead */
+  @media (min-width: 768px) {
+    .tip:hover .tip-wrap,
+    .tip:focus-within .tip-wrap {
+      grid-template-rows: 1fr;
+      opacity: 1;
+    }
   }
   .tip-card {
     min-height: 0;

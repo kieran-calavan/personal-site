@@ -11,6 +11,9 @@ const details = [
   ['based', 'saint paul, mn'],
   ['exp', '4+ years'],
 ];
+const builds = [
+  ['trade-automate', 'https://trade-automate.com/'],
+];
 ---
 
 <BaseLayout>
@@ -54,6 +57,13 @@ const details = [
 
       <!-- contact -->
       <nav class="bg-[#09090b] md:col-span-4 py-6 md:p-8 flex flex-col gap-3.5" aria-label="Contact links">
+        <div class="mono">
+          <p class="text-[11px] tracking-[0.25em] uppercase text-zinc-500 mb-1">builds</p>
+          {builds.map(([label, href]) => (
+            <a href={href} target="_blank" rel="noopener noreferrer"
+               class="block text-sm text-zinc-200 hover:text-[var(--accent)] transition-colors">{label} ↗</a>
+          ))}
+        </div>
         <h2 class="mono text-[11px] tracking-[0.25em] uppercase text-zinc-500 mb-1">contact</h2>
         {links.map(([label, href]) => (
           <a href={href} target="_blank" rel="noopener noreferrer"

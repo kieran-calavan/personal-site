@@ -32,31 +32,36 @@ const builds = [
     <!-- ledger -->
     <div class="grid grid-cols-1 md:grid-cols-12 gap-px bg-zinc-800 mt-px">
       <!-- profile -->
-      <section class="rise bg-[#09090b] md:col-span-5 py-6 md:p-8" style="animation-delay:0.18s">
-        <h2 class="mono text-[11px] tracking-[0.25em] uppercase accent mb-4">profile</h2>
-        <p class="mono text-sm text-zinc-300 leading-relaxed">
-          <span class="accent">$</span> Web developer with 4+ years shipping production sites for agencies and clients. Always tinkering on personal builds.<span class="term-caret"></span>
-        </p>
+      <section class="bg-[#09090b] md:col-span-5 py-6 md:p-8">
+        <div class="rise" style="animation-delay:0.18s">
+          <h2 class="mono text-[11px] tracking-[0.25em] uppercase accent mb-4">profile</h2>
+          <p class="mono text-sm text-zinc-300 leading-relaxed">
+            <span class="accent">$</span> Web developer with 4+ years shipping production sites for agencies and clients. Always tinkering on personal builds.<span class="term-caret"></span>
+          </p>
+        </div>
       </section>
 
       <!-- details -->
-      <section class="rise bg-[#09090b] md:col-span-3 py-6 md:p-8 flex flex-col gap-5" style="animation-delay:0.26s">
-        <h2 class="mono text-[11px] tracking-[0.25em] uppercase text-zinc-500">details</h2>
-        {details.map(([k, v]) => (
+      <section class="bg-[#09090b] md:col-span-3 py-6 md:p-8">
+        <div class="rise flex flex-col gap-5" style="animation-delay:0.26s">
+          <h2 class="mono text-[11px] tracking-[0.25em] uppercase text-zinc-500">details</h2>
+          {details.map(([k, v]) => (
+            <div class="mono">
+              <p class="text-[11px] uppercase text-zinc-600">{k}</p>
+              <p class="text-sm text-zinc-200 mt-0.5">{v}</p>
+            </div>
+          ))}
           <div class="mono">
-            <p class="text-[11px] uppercase text-zinc-600">{k}</p>
-            <p class="text-sm text-zinc-200 mt-0.5">{v}</p>
+            <p class="text-[11px] uppercase text-zinc-600">now</p>
+            <a href="https://thatsnice.com" target="_blank" rel="noopener noreferrer"
+               class="link-underline inline-block w-fit text-sm text-zinc-200 mt-0.5 hover:text-[var(--accent)] transition-colors">that's nice ↗</a>
           </div>
-        ))}
-        <div class="mono">
-          <p class="text-[11px] uppercase text-zinc-600">now</p>
-          <a href="https://thatsnice.com" target="_blank" rel="noopener noreferrer"
-             class="link-underline inline-block w-fit text-sm text-zinc-200 mt-0.5 hover:text-[var(--accent)] transition-colors">that's nice ↗</a>
         </div>
       </section>
 
       <!-- contact -->
-      <nav class="rise bg-[#09090b] md:col-span-4 py-6 md:p-8 flex flex-col gap-3.5" style="animation-delay:0.34s" aria-label="Contact links">
+      <nav class="bg-[#09090b] md:col-span-4 py-6 md:p-8" aria-label="Contact links">
+        <div class="rise flex flex-col gap-3.5" style="animation-delay:0.34s">
         <div class="mono flex flex-col gap-1">
           <p class="text-[11px] tracking-[0.25em] uppercase text-zinc-500 mb-1">personal projects</p>
           {builds.map(([label, href, desc], i) => {
@@ -96,6 +101,7 @@ const builds = [
             <span class="text-zinc-600 group-hover:text-[var(--accent)] group-hover:translate-x-0.5 transition-all">↗</span>
           </a>
         ))}
+        </div>
       </nav>
     </div>
   </main>

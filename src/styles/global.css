@@ -76,6 +76,13 @@ body > * { position: relative; z-index: 1; }
   background: var(--accent);
   animation: caret-blink 1.05s steps(1) infinite;
 }
+/* only one caret at a time: hide the profile caret while a tooltip is open */
+body:has(.tip:hover) .term-caret,
+body:has(.tip:focus-within) .term-caret,
+body:has(.tip-toggle:checked) .term-caret {
+  animation: none;
+  opacity: 0;
+}
 
 /* animated underline-draw for links */
 .link-underline {

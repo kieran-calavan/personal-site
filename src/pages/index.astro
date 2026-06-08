@@ -189,7 +189,8 @@ const builds = [
     opacity: 0;
   }
   .tip:hover .tip-caret,
-  .tip:focus-within .tip-caret {
+  .tip:focus-within .tip-caret,
+  .tip:has(.tip-toggle:checked) .tip-caret {
     animation: tip-blink 1s steps(1) 0.34s infinite;
   }
   @keyframes tip-blink {

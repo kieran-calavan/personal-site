@@ -42,5 +42,46 @@ const {
   </head>
   <body>
     <slot />
+    <div class="spotlight" aria-hidden="true"></div>
+
+    <script>
+      // cursor spotlight: eases --mx/--my toward the pointer; skipped on touch + reduced motion
+      const skip = matchMedia('(hover: none), (pointer: coarse), (prefers-reduced-motion: reduce)');
+
+      if (!skip.matches) {
+        const body = document.body;
+        let tx = 0, ty = 0, x = 0, y = 0;
+        let frame = 0;
+        let placed = false;
+
+        const tick = () => {
+          x += (tx - x) * 0.18;
+          y += (ty - y) * 0.18;
+          body.style.setProperty('--mx', `${x}px`);
+          body.style.setProperty('--my', `${y}px`);
+          // stop the loop once settled so it doesn't run while idle
+          frame = Math.abs(tx - x) + Math.abs(ty - y) > 0.5 ? requestAnimationFrame(tick) : 0;
+        };
+
+        addEventListener('pointermove', (e) => {
+          if (e.pointerType !== 'mouse') return;
+          tx = e.clientX;
+          ty = e.clientY;
+          // first move: jump straight there instead of sliding in from the corner
+          if (!placed) { x = tx; y = ty; placed = true; }
+          body.classList.add('spot-on');
+          if (!frame) frame = requestAnimationFrame(tick);
+        }, { passive: true });
+
+        // swell the spotlight while over anything clickable
+        addEventListener('pointerover', (e) => {
+          body.classList.toggle('spot-hot', !!(e.target as Element).closest('a, label, button'));
+        });
+
+        const hide = () => body.classList.remove('spot-on');
+        document.documentElement.addEventListener('pointerleave', hide);
+        addEventListener('blur', hide);
+      }
+    </script>
   </body>
 </html>

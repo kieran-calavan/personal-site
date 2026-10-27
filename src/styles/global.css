@@ -39,6 +39,54 @@ body::before {
 }
 body > * { position: relative; z-index: 1; }
 
+/* cursor spotlight: radius + strength are registered so they can animate on link hover */
+@property --spot-r {
+  syntax: '<length>';
+  inherits: true;
+  initial-value: 150px;
+}
+@property --spot-a {
+  syntax: '<number>';
+  inherits: true;
+  initial-value: 0.06;
+}
+body {
+  transition: --spot-r 0.3s cubic-bezier(0.16, 1, 0.3, 1), --spot-a 0.3s ease;
+}
+body.spot-hot {
+  --spot-r: 190px;
+  --spot-a: 0.1;
+}
+
+/* lit copy of the texture, revealed around the pointer */
+body::after {
+  content: '';
+  position: fixed;
+  inset: 0;
+  background: url('/bg-pattern-lit.svg');
+  -webkit-mask-image: radial-gradient(circle var(--spot-r) at var(--mx, -999px) var(--my, -999px), #000, transparent);
+  mask-image: radial-gradient(circle var(--spot-r) at var(--mx, -999px) var(--my, -999px), #000, transparent);
+  opacity: 0;
+  transition: opacity 0.4s ease;
+  pointer-events: none;
+  z-index: 0;
+}
+/* soft glow on top of everything, screen-blended so it only ever lightens */
+body > .spotlight {
+  position: fixed;
+  inset: 0;
+  background: radial-gradient(circle calc(var(--spot-r) + 50px) at var(--mx, -999px) var(--my, -999px), rgb(250 204 21 / var(--spot-a)), transparent 70%);
+  mix-blend-mode: screen;
+  opacity: 0;
+  transition: opacity 0.4s ease;
+  pointer-events: none;
+  z-index: 50;
+}
+body.spot-on::after,
+body.spot-on > .spotlight {
+  opacity: 1;
+}
+
 /* text selection */
 ::selection {
   background: var(--accent);
@@ -109,5 +157,6 @@ body:has(.tip-toggle:checked) .term-caret {
   .rise { animation: none; opacity: 1; }
   .term-caret { animation: none; }
   .link-underline::after { transition: none; }
+  body::after, body > .spotlight { display: none; }
   html { scroll-behavior: auto; }
 }

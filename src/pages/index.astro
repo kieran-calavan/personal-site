@@ -9,7 +9,7 @@ const links = [
 const details = [
   ['role', 'web developer'],
   ['based', 'saint paul, mn'],
-  ['exp', '4+ years'],
+  ['experience', '4+ years'],
 ];
 const builds = [
   ['trade automate', 'https://trade-automate.com/', 'Booking, scheduling & automation platform built for trades businesses.'],
@@ -30,9 +30,9 @@ const builds = [
     </header>
 
     <!-- ledger -->
-    <div class="grid grid-cols-1 md:grid-cols-12 gap-px bg-zinc-800 mt-px">
+    <div class="grid grid-cols-1 md:grid-cols-12">
       <!-- profile -->
-      <section class="bg-[#09090b] md:col-span-5 py-6 md:p-8">
+      <section class="md:col-span-5 py-6 md:p-8">
         <div class="rise" style="animation-delay:0.18s">
           <h2 class="mono text-[11px] tracking-[0.25em] uppercase accent mb-4">profile</h2>
           <p class="mono text-sm text-zinc-300 leading-relaxed">
@@ -42,7 +42,7 @@ const builds = [
       </section>
 
       <!-- details -->
-      <section class="bg-[#09090b] md:col-span-3 py-6 md:p-8">
+      <section class="border-t md:border-t-0 md:border-l border-zinc-800 md:col-span-3 py-6 md:p-8">
         <div class="rise flex flex-col gap-5" style="animation-delay:0.26s">
           <h2 class="mono text-[11px] tracking-[0.25em] uppercase text-zinc-500">details</h2>
           {details.map(([k, v]) => (
@@ -60,9 +60,9 @@ const builds = [
       </section>
 
       <!-- contact -->
-      <nav class="bg-[#09090b] md:col-span-4 py-6 md:p-8" aria-label="Contact links">
+      <nav class="border-t md:border-t-0 md:border-l border-zinc-800 md:col-span-4 py-6 md:p-8" aria-label="Contact links">
         <div class="rise flex flex-col gap-3.5" style="animation-delay:0.34s">
-        <div class="mono flex flex-col gap-1">
+        <div class="mono flex flex-col gap-3.5">
           <p class="text-[11px] tracking-[0.25em] uppercase text-zinc-500 mb-1">personal projects</p>
           {builds.map(([label, href, desc], i) => {
             const words = desc.trim().split(' ');
@@ -83,11 +83,13 @@ const builds = [
                 </label>
               </div>
               <div class="tip-wrap">
-                <a href={href} target="_blank" rel="noopener noreferrer"
-                   class="tip-card relative block overflow-hidden border-l-2 border-l-[var(--accent)] bg-zinc-900/95 w-72 text-[11px] normal-case tracking-normal leading-snug text-zinc-300 hover:bg-zinc-800/95 hover:text-zinc-100 transition-colors">
-                  <span class="tip-scan"></span>
-                  <span class="accent mr-1">›</span>{head} <span class="whitespace-nowrap">{last}<span class="tip-caret"></span></span>
-                </a>
+                <div class="tip-inner">
+                  <a href={href} target="_blank" rel="noopener noreferrer"
+                     class="tip-card relative block overflow-hidden border-l-2 border-l-[var(--accent)] bg-zinc-900/95 w-72 text-[11px] normal-case tracking-normal leading-snug text-zinc-300 hover:bg-zinc-800/95 hover:text-zinc-100 transition-colors">
+                    <span class="tip-scan"></span>
+                    <span class="accent mr-1">›</span>{head} <span class="whitespace-nowrap">{last}<span class="tip-caret"></span></span>
+                  </a>
+                </div>
               </div>
             </div>
             );
@@ -142,8 +144,12 @@ const builds = [
       opacity: 1;
     }
   }
-  .tip-card {
+  /* the grid row collapses this wrapper fully, card margin + padding included, so a closed tip takes no space */
+  .tip-inner {
     min-height: 0;
+    overflow: hidden;
+  }
+  .tip-card {
     margin-top: 0.6rem;
     padding: 0.5rem 0.75rem;
   }

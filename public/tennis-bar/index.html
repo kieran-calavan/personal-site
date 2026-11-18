@@ -1,0 +1,375 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>TennisBar</title>
+<meta name="description" content="Live ATP and WTA tennis scores in your Mac's menubar, with point-by-point scores, big-point badges and alerts for the players you follow.">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns=%27http://www.w3.org/2000/svg%27 viewBox=%270 0 16 16%27%3E%3Ccircle cx=%278%27 cy=%278%27 r=%277%27 fill=%27%23dceb4e%27/%3E%3C/svg%3E">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@500;600;700&family=Barlow:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --court: #1f3b5e;
+    --court-deep: #183050;
+    --court-light: #2b4f7a;
+    --line: #f3f6f9;
+    --muted: #b3c3d6;
+    --ball: #dceb4e;
+    --big: #f0a04b;
+    --tile: rgba(255, 255, 255, 0.12);
+    --measure: 34rem;
+  }
+
+  * { box-sizing: border-box; }
+  html { -webkit-text-size-adjust: 100%; }
+  body {
+    margin: 0;
+    background: var(--court);
+    color: var(--line);
+    font: 400 1.0625rem/1.6 "Barlow", system-ui, sans-serif;
+  }
+  img { display: block; max-width: 100%; height: auto; }
+  a { color: inherit; }
+  a:focus-visible, .button:focus-visible { outline: 3px solid var(--ball); outline-offset: 3px; }
+
+  .wrap { width: min(70rem, 100% - 2rem); margin-inline: auto; }
+
+  h1, h2 {
+    font-family: "Barlow Condensed", system-ui, sans-serif;
+    font-weight: 700;
+    line-height: 1.02;
+    letter-spacing: -0.01em;
+    margin: 0;
+    text-wrap: balance;
+  }
+  h1 { font-size: clamp(2.75rem, 7vw, 5rem); }
+  h2 { font-size: clamp(2rem, 4.2vw, 2.9rem); }
+  p { margin: 0; max-width: var(--measure); }
+  p + p { margin-top: 0.9em; }
+  .lede { font-size: 1.25rem; color: var(--muted); margin-top: 1.25rem; }
+
+  /* Hero: the menubar scoreboard, blown up and inside court lines. */
+  .hero { padding: 4.5rem 0 5rem; }
+  .court {
+    border: 3px solid var(--line);
+    padding: clamp(1.5rem, 5vw, 3.5rem);
+    display: grid;
+    gap: 3rem;
+    grid-template-columns: minmax(0, 1fr) auto;
+    align-items: center;
+    position: relative;
+  }
+  /* The center service line. */
+  .court::after {
+    content: "";
+    position: absolute;
+    left: 50%;
+    top: 0;
+    height: 18px;
+    border-left: 3px solid var(--line);
+  }
+  .actions { display: flex; flex-wrap: wrap; align-items: center; gap: 0.75rem 1.5rem; margin-top: 2rem; }
+  .button {
+    display: inline-block;
+    background: var(--line);
+    color: var(--court-deep);
+    font-weight: 600;
+    text-decoration: none;
+    padding: 0.8rem 1.4rem;
+    border-radius: 999px;
+  }
+  .button:hover { background: #fff; }
+  .note { color: var(--muted); font-size: 0.95rem; }
+
+  .scoreboard {
+    font-family: "Barlow Condensed", system-ui, sans-serif;
+    font-weight: 600;
+    font-size: clamp(1.75rem, 4vw, 2.6rem);
+    line-height: 1;
+    background: var(--court-deep);
+    border-radius: 14px;
+    padding: 1.25rem 1.4rem;
+    min-width: 0;
+  }
+  .board-title {
+    display: flex;
+    justify-content: space-between;
+    gap: 1rem;
+    font: 500 0.95rem/1.2 "Barlow", system-ui, sans-serif;
+    color: var(--muted);
+    margin-bottom: 1rem;
+  }
+  .badge {
+    background: var(--big);
+    color: #1d1d1d;
+    font-weight: 600;
+    border-radius: 999px;
+    padding: 0.1rem 0.6rem;
+    opacity: 0;
+    transition: opacity 0.25s;
+  }
+  .badge.on { opacity: 1; }
+  .row { display: grid; grid-template-columns: 0.7em 6.2em repeat(3, 1.1em) 1.9em; align-items: center; gap: 0.3em; }
+  .row + .row { margin-top: 0.3em; }
+  .dot { width: 0.32em; height: 0.32em; border-radius: 50%; background: var(--ball); visibility: hidden; }
+  .serving .dot { visibility: visible; animation: pulse 1.6s ease-in-out infinite; }
+  .name { text-transform: uppercase; }
+  .g { text-align: center; font-variant-numeric: tabular-nums; }
+  .g.lost { color: var(--muted); opacity: 0.75; }
+  .g.now { background: var(--tile); border-radius: 0.15em; }
+  .pts {
+    text-align: center;
+    font-variant-numeric: tabular-nums;
+    background: #000;
+    border-radius: 0.15em;
+    padding: 0.08em 0;
+    transition: background 0.25s, color 0.25s;
+  }
+  .pts.big { background: var(--big); color: #1d1d1d; }
+  @keyframes pulse { 50% { opacity: 0.35; } }
+
+  /* Features */
+  .feature {
+    border-top: 3px solid var(--line);
+    padding: 4.5rem 0;
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) minmax(0, 1.35fr);
+    gap: 3rem 4rem;
+    align-items: start;
+  }
+  .hero + main .feature:first-child { border-top: 0; padding-top: 1rem; }
+  .feature h2 { margin-bottom: 1.25rem; }
+  .feature p { color: var(--muted); }
+  .feature p strong { color: var(--line); font-weight: 600; }
+  .shot { border-radius: 12px; box-shadow: 0 18px 50px rgba(5, 15, 30, 0.45); }
+  .pair { display: grid; grid-template-columns: 1fr 1fr; gap: 1.25rem; align-items: start; }
+  .menubars { display: flex; flex-wrap: wrap; gap: 1.5rem; align-items: flex-end; }
+  .menubar-sample { background: var(--court-deep); border-radius: 10px; padding: 1rem 1.25rem; }
+  .menubar-sample img { width: 150px; }
+  .menubar-sample figcaption { color: var(--muted); font-size: 0.95rem; margin-top: 0.6rem; }
+  figure { margin: 0; }
+
+  .notification {
+    background: rgba(236, 240, 245, 0.92);
+    color: #1d1d1f;
+    border-radius: 16px;
+    padding: 0.9rem 1rem;
+    display: grid;
+    grid-template-columns: 2.4rem 1fr;
+    gap: 0.75rem;
+    max-width: 24rem;
+    box-shadow: 0 18px 50px rgba(5, 15, 30, 0.45);
+    font: 400 0.95rem/1.35 system-ui, -apple-system, sans-serif;
+  }
+  .notification + .notification { margin-top: 0.9rem; }
+  .app-icon {
+    width: 2.4rem; height: 2.4rem; border-radius: 0.6rem;
+    background: var(--court-light);
+    display: grid; place-items: center;
+  }
+  .app-icon span { width: 1rem; height: 1rem; border-radius: 50%; background: var(--ball); }
+  .notification b { display: block; font-weight: 600; }
+  .notification .when { float: right; color: #6e6e73; font-size: 0.85rem; }
+  .notification .buttons { display: flex; gap: 0.5rem; margin-top: 0.6rem; }
+  .notification .buttons span { background: rgba(0, 0, 0, 0.07); border-radius: 6px; padding: 0.2rem 0.6rem; font-size: 0.85rem; }
+
+  .details {
+    border-top: 3px solid var(--line);
+    padding: 4.5rem 0;
+  }
+  .details h2 { margin-bottom: 2rem; }
+  .details dl {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(15rem, 1fr));
+    gap: 2rem 3rem;
+    margin: 0;
+  }
+  .details dt { font-weight: 600; margin-bottom: 0.3rem; }
+  .details dd { margin: 0; color: var(--muted); }
+  kbd { font: inherit; }
+
+  footer {
+    background: var(--court-deep);
+    padding: 3rem 0 3.5rem;
+    color: var(--muted);
+    font-size: 0.95rem;
+  }
+  footer .wrap { display: flex; flex-wrap: wrap; justify-content: space-between; gap: 1rem 3rem; }
+  footer p { max-width: 38rem; }
+
+  @media (max-width: 52rem) {
+    .court { grid-template-columns: 1fr; gap: 2.5rem; }
+    .court::after { display: none; }
+    .feature { grid-template-columns: 1fr; padding: 3.5rem 0; }
+    .hero { padding: 2.5rem 0 3.5rem; }
+    .scoreboard { justify-self: start; max-width: 100%; }
+  }
+  @media (max-width: 30rem) {
+    .pair { grid-template-columns: 1fr; }
+    .row { grid-template-columns: 0.6em 4.6em repeat(3, 1.05em) 1.7em; }
+    .scoreboard { font-size: 1.35rem; padding: 1rem; justify-self: stretch; }
+    .court { padding: 1.5rem 1.1rem; }
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .serving .dot { animation: none; }
+    .badge, .pts { transition: none; }
+  }
+</style>
+</head>
+<body>
+
+<header class="hero">
+  <div class="wrap court">
+    <div>
+      <h1>Live tennis scores in your Mac's menubar.</h1>
+      <p class="lede">TennisBar keeps the match you care about next to the clock: sets, games and the point being played, from every ATP and WTA tournament.</p>
+      <div class="actions">
+        <a class="button" href="downloads/TennisBar.zip" download>Download for Mac</a>
+        <span class="note">Free. Needs macOS 13 or later.</span>
+      </div>
+    </div>
+
+    <div class="scoreboard" role="img" aria-label="Example scoreboard: Sinner against Alcaraz in the third set, with Sinner earning a break point and then breaking serve.">
+      <div class="board-title" aria-hidden="true">
+        <span>Nitto ATP Finals</span>
+        <span class="badge" id="badge">Break point Sinner</span>
+      </div>
+      <div class="row" aria-hidden="true">
+        <span class="dot"></span>
+        <span class="name">Sinner 🇮🇹</span>
+        <span class="g">6</span><span class="g lost">3</span><span class="g now" id="g0">4</span>
+        <span class="pts" id="p0">30</span>
+      </div>
+      <div class="row serving" aria-hidden="true">
+        <span class="dot"></span>
+        <span class="name">Alcaraz 🇪🇸</span>
+        <span class="g lost">4</span><span class="g">6</span><span class="g now" id="g1">3</span>
+        <span class="pts" id="p1">40</span>
+      </div>
+    </div>
+  </div>
+</header>
+
+<main class="wrap">
+  <section class="feature">
+    <div>
+      <h2>Every point, as it's played</h2>
+      <p>Click any match to pin it to the menubar. You get every set, the current game's points and a dot for who's serving.</p>
+      <p><strong>Match, set and break points turn orange</strong>, in the menubar and in the dropdown, so you know when to look up.</p>
+    </div>
+    <img class="shot" src="images/live.png" width="400" height="419" alt="TennisBar dropdown showing Sinner serving for the match with a 'Match point Sinner' badge, and a WTA match below with a break point.">
+  </section>
+
+  <section class="feature">
+    <div>
+      <h2>The whole week in one dropdown</h2>
+      <p><strong>Live</strong> groups matches by tournament. <strong>Upcoming</strong> lists the next seven days, day by day. <strong>Past</strong> keeps a week of results.</p>
+      <p>Filter by tour or by the players you follow, or search for a player. Typing “Swiatek” finds Świątek.</p>
+    </div>
+    <div class="pair">
+      <img class="shot" src="images/upcoming.png" width="400" height="522" alt="Upcoming tab with matches grouped under Today, Tomorrow and later days.">
+      <img class="shot" src="images/past.png" width="400" height="444" alt="Past tab with finished tournaments, each marked with its surface.">
+    </div>
+  </section>
+
+  <section class="feature">
+    <div>
+      <h2>Alerts for the players you follow</h2>
+      <p>Get a notification when their match starts, when a set is won, when serve is broken and when it's over. Pin the match or mute it straight from the alert.</p>
+      <p>Set quiet hours for the late-night matches on the other side of the world. With the optional relay, the same alerts reach your iPhone even while your Mac is asleep.</p>
+    </div>
+    <div aria-label="Example notifications" role="group">
+      <div class="notification">
+        <div class="app-icon" aria-hidden="true"><span></span></div>
+        <div>
+          <span class="when">now</span>
+          <b>Alcaraz takes set 2</b>
+          Sinner v Alcaraz, 4-6 6-3. Nitto ATP Finals, Final.
+          <div class="buttons" aria-hidden="true"><span>Pin to Menubar</span><span>Mute This Match</span></div>
+        </div>
+      </div>
+      <div class="notification">
+        <div class="app-icon" aria-hidden="true"><span></span></div>
+        <div>
+          <span class="when">2h ago</span>
+          <b>Underway: Shelton v Jodar</b>
+          Nitto ATP Finals, Group Stage.
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="feature">
+    <div>
+      <h2>Sized for your menubar</h2>
+      <p>Show every set, or only sets won when space is tight. Flags are optional too.</p>
+    </div>
+    <div class="menubars">
+      <figure class="menubar-sample">
+        <img src="images/menubar-all-sets.png" width="150" height="68" alt="Menubar scoreboard with every set.">
+        <figcaption>Every set</figcaption>
+      </figure>
+      <figure class="menubar-sample">
+        <img src="images/menubar-sets-won.png" width="136" height="68" alt="Narrower menubar scoreboard with sets won.">
+        <figcaption>Sets won</figcaption>
+      </figure>
+    </div>
+  </section>
+
+  <section class="details">
+    <h2>Small things that help</h2>
+    <dl>
+      <div>
+        <dt>Open from anywhere</dt>
+        <dd>Press <kbd>⌃⌥T</kbd> to open the dropdown without reaching for the menubar.</dd>
+      </div>
+      <div>
+        <dt>Add to Calendar</dt>
+        <dd>Right-click an upcoming match to put it in your calendar.</dd>
+      </div>
+      <div>
+        <dt>Easy on the battery</dt>
+        <dd>Checks every 30 seconds during live play and every five minutes otherwise, and pauses while your screen is locked.</dd>
+      </div>
+      <div>
+        <dt>Surfaces at a glance</dt>
+        <dd>Each tournament is marked with its court color: hard, clay, grass or indoor.</dd>
+      </div>
+    </dl>
+  </section>
+</main>
+
+<footer>
+  <div class="wrap">
+    <p>TennisBar is a personal project by <a href="https://kierancalavan.com/">Kieran Calavan</a>, built in Swift and SwiftUI. Scores come from ESPN, and live points from Live Tennis API.</p>
+    <p>To install, unzip and drag TennisBar to Applications. It isn't notarized, so the first time, open it from System Settings, Privacy &amp; Security, Open Anyway.</p>
+  </div>
+</footer>
+
+<script>
+  // One short rally on the hero scoreboard: Sinner breaks Alcaraz, then it stops.
+  (function () {
+    if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
+    var steps = [
+      { p: ["40", "40"] },
+      { p: ["AD", "40"], big: true },
+      { p: ["0", "0"], g: ["5", "3"] },
+    ];
+    var p0 = document.getElementById("p0"), p1 = document.getElementById("p1");
+    var g0 = document.getElementById("g0"), g1 = document.getElementById("g1");
+    var badge = document.getElementById("badge");
+    steps.forEach(function (step, i) {
+      setTimeout(function () {
+        p0.textContent = step.p[0];
+        p1.textContent = step.p[1];
+        p0.classList.toggle("big", !!step.big);
+        badge.classList.toggle("on", !!step.big);
+        if (step.g) { g0.textContent = step.g[0]; g1.textContent = step.g[1]; }
+      }, 1600 + i * 1700);
+    });
+  })();
+</script>
+</body>
+</html>

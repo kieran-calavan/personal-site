@@ -18,7 +18,7 @@ const builds = [
 ---
 
 <BaseLayout>
-  <main class="min-h-[100dvh] w-full max-w-[1200px] mx-auto px-6 md:px-10 flex flex-col justify-center py-10 lg:py-20">
+  <main class="min-h-dvh w-full max-w-[1200px] mx-auto px-6 md:px-10 flex flex-col justify-center py-10 lg:py-20">
     <!-- masthead -->
     <header class="rise flex items-end justify-between gap-6 border-b border-zinc-700 pb-6" style="animation-delay:0.05s">
       <h1 class="text-[clamp(2.5rem,10vw,8rem)] font-black tracking-tighter leading-[0.85]">
@@ -54,7 +54,7 @@ const builds = [
           <div class="mono">
             <p class="text-[11px] uppercase text-zinc-600">now</p>
             <a href="https://thatsnice.com" target="_blank" rel="noopener noreferrer"
-               class="link-underline inline-block w-fit text-sm text-zinc-200 mt-0.5 hover:text-[var(--accent)] transition-colors">that's nice ↗</a>
+               class="link-underline inline-block w-fit text-sm text-zinc-200 mt-0.5 hover:text-(--accent) transition-colors">that's nice ↗</a>
           </div>
         </div>
       </section>
@@ -72,7 +72,7 @@ const builds = [
             <div class="tip group w-fit">
               <div class="flex items-center gap-2">
                 <a href={href} target="_blank" rel="noopener noreferrer"
-                   class="link-underline inline-block w-fit text-sm text-zinc-200 group-hover:text-[var(--accent)] transition-colors">{label} ↗</a>
+                   class="link-underline inline-block w-fit text-sm text-zinc-200 group-hover:text-(--accent) transition-colors">{label} ↗</a>
                 <input id={`tip-${i}`} type="checkbox" class="tip-toggle sr-only md:hidden" />
                 <label for={`tip-${i}`} aria-label={`Show description for ${label}`}
                        class="tip-btn md:hidden inline-flex items-center justify-center p-1.5 -m-1.5 translate-y-px text-zinc-600 cursor-pointer select-none">
@@ -85,7 +85,7 @@ const builds = [
               <div class="tip-wrap">
                 <div class="tip-inner">
                   <a href={href} target="_blank" rel="noopener noreferrer"
-                     class="tip-card relative block overflow-hidden border-l-2 border-l-[var(--accent)] bg-zinc-900/95 w-72 text-[11px] normal-case tracking-normal leading-snug text-zinc-300 hover:bg-zinc-800/95 hover:text-zinc-100 transition-colors">
+                     class="tip-card relative block overflow-hidden border-l-2 border-l-(--accent) bg-zinc-900/95 w-72 text-[11px] normal-case tracking-normal leading-snug text-zinc-300 hover:bg-zinc-800/95 hover:text-zinc-100 transition-colors">
                     <span class="tip-scan"></span>
                     <span class="accent mr-1">›</span>{head} <span class="whitespace-nowrap">{last}<span class="tip-caret"></span></span>
                   </a>
@@ -98,9 +98,9 @@ const builds = [
         <h2 class="mono text-[11px] tracking-[0.25em] uppercase text-zinc-500 mb-1">contact</h2>
         {links.map(([label, href]) => (
           <a href={href} target="_blank" rel="noopener noreferrer"
-             class="group mono flex items-center justify-between text-sm text-zinc-300 hover:text-[var(--accent)] transition-colors">
+             class="group mono flex items-center justify-between text-sm text-zinc-300 hover:text-(--accent) transition-colors">
             <span class="link-underline">[ {label} ]</span>
-            <span class="text-zinc-600 group-hover:text-[var(--accent)] group-hover:translate-x-0.5 transition-all">↗</span>
+            <span class="text-zinc-600 group-hover:text-(--accent) group-hover:translate-x-0.5 transition-all">↗</span>
           </a>
         ))}
         </div>
